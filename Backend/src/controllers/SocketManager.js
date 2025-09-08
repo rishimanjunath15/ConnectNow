@@ -18,25 +18,29 @@ export const connectToSocket = (server) => {
 
     io.on("connection", (socket) => {
 
-        console.log("SOMETHING CONNECTED")
+        console.log(`New connection: ${socket.id}`)
 
         socket.on("join-call", (path) => {
+            console.log(`${socket.id} joining call: ${path}`);
 
             if (connections[path] === undefined) {
                 connections[path] = []
             }
-            connections[path].push(socket.id)
+            
+            // Don't add if already in the room
+            if (!connections[path].includes(socket.id)) {
+                connections[path].push(socket.id)
+                timeOnline[socket.id] = new Date();
+            }
 
-            timeOnline[socket.id] = new Date();
+            console.log(`Room ${path} now has ${connections[path].length} participants:`, connections[path]);
 
-            // connections[path].forEach(elem => {
-            //     io.to(elem)
-            // })
-
+            // Emit to all users in the room including the new one
             for (let a = 0; a < connections[path].length; a++) {
                 io.to(connections[path][a]).emit("user-joined", socket.id, connections[path])
             }
 
+            // Send existing messages to new user
             if (messages[path] !== undefined) {
                 for (let a = 0; a < messages[path].length; ++a) {
                     io.to(socket.id).emit("chat-message", messages[path][a]['data'],
@@ -47,6 +51,7 @@ export const connectToSocket = (server) => {
         })
 
         socket.on("signal", (toId, message) => {
+            console.log(`Signal from ${socket.id} to ${toId}`);
             io.to(toId).emit("signal", socket.id, message);
         })
 
@@ -80,35 +85,40 @@ export const connectToSocket = (server) => {
         })
 
         socket.on("disconnect", () => {
+            console.log(`${socket.id} disconnected`);
 
             var diffTime = Math.abs(timeOnline[socket.id] - new Date())
-
             var key
 
             for (const [k, v] of JSON.parse(JSON.stringify(Object.entries(connections)))) {
-
                 for (let a = 0; a < v.length; ++a) {
                     if (v[a] === socket.id) {
                         key = k
+                        
+                        console.log(`Removing ${socket.id} from room ${key}`);
 
+                        // Notify other users in the room
                         for (let a = 0; a < connections[key].length; ++a) {
-                            io.to(connections[key][a]).emit('user-left', socket.id)
+                            if (connections[key][a] !== socket.id) {
+                                io.to(connections[key][a]).emit('user-left', socket.id)
+                            }
                         }
 
                         var index = connections[key].indexOf(socket.id)
-
                         connections[key].splice(index, 1)
 
+                        console.log(`Room ${key} now has ${connections[key].length} participants`);
 
                         if (connections[key].length === 0) {
                             delete connections[key]
+                            console.log(`Room ${key} deleted (empty)`);
                         }
                     }
                 }
-
             }
-
-
+            
+            // Clean up time tracking
+            delete timeOnline[socket.id];
         })
 
 
