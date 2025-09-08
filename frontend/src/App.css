@@ -1,0 +1,112 @@
+.landingPageContainer{
+  width:100vw;
+  height: 100vh;
+background: url("./Assets/background.png");
+
+background-repeat: no-repeat;
+background-size: cover   ;
+color: white;
+}
+
+.landingPageContainer nav{
+  padding-inline: 1.2rem;
+  padding-block: 1.7rem;
+  padding: 2rem;
+  display: flex;
+  justify-content:space-between ;
+}
+
+.landingPageContainer nav h2{
+  font-size: 2.5rem;
+  font-weight:  55px; 
+}
+
+.landingPageContainer nav .navList{
+display: flex;
+gap:1.6rem;
+cursor: pointer;
+}
+
+.landingMianContainer{
+  display: flex;
+   align-items: center;
+  justify-content: space-between;
+  padding-inline:3rem; 
+    height: 60vh;
+}
+
+.landingMianContainer > div:nth-child(1){
+    flex: 1;
+  padding-right: 2rem;
+  
+}
+.landingMianContainer > div:nth-child(1) div[role='button']{
+  background-color: #d97500;
+  width: fit-content;
+  padding: 1rem;
+ border-radius: 0.7rem;
+ margin-top: 1.5rem;
+ 
+}
+
+.landingMianContainer > div:nth-child(2) {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  
+}
+
+.landingMianContainer > div:nth-child(2) img {
+  width:450px;
+  height: auto;
+  object-fit: contain;
+}.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 20px;
+  text-align: center;
+
+}
+.meetContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; /* Ensures items start from left */
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.leftPanel {
+  width: 50%; /* or any size you want */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the left inside leftPanel */
+  padding-left: 5%; /* Optional: gives some spacing from the edge */
+}
+
+.rightPanel {
+  display: flex;
+  align-items: center;
+}
+
+.rightPanel > img {
+  width: 50vw;
+  height: auto;
+  border-radius: 20px;
+}
+.enlargedContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+
