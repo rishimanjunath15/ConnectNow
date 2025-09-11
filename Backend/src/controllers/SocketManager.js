@@ -18,7 +18,7 @@ export const connectToSocket = (server) => {
 
     io.on("connection", (socket) => {
 
-        console.log(`New connection: ${socket.id}`)
+        console.log(`New connection: ${socket.id} from ${socket.handshake.address}`)
 
         socket.on("join-call", (path) => {
             console.log(`${socket.id} joining call: ${path}`);
