@@ -11,9 +11,7 @@ import MicOffIcon from '@mui/icons-material/MicOff'
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
 import ChatIcon from '@mui/icons-material/Chat'
-import server from '../environment';
-
-const server_url = server;
+import connectionManager from '../environment';
 
 var connections = {};
 
@@ -62,6 +60,9 @@ export default function VideoMeetComponent() {
     const videoRef = useRef([])
 
     let [videos, setVideos] = useState([])
+    
+    let [serverUrl, setServerUrl] = useState('');
+    let [connectionStatus, setConnectionStatus] = useState('connecting');
 
     // TODO
     // if(isChrome() === false) {
@@ -71,9 +72,23 @@ export default function VideoMeetComponent() {
 
     useEffect(() => {
         console.log("HELLO")
-        getPermissions();
+        initializeConnection();
+    }, [])
 
-    })
+    const initializeConnection = async () => {
+        try {
+            const workingServer = await connectionManager.findWorkingServer();
+            setServerUrl(workingServer);
+            setConnectionStatus('connected');
+            console.log('Video component connected to:', workingServer);
+            getPermissions();
+        } catch (error) {
+            setConnectionStatus('error');
+            console.error('Failed to establish connection:', error);
+            // Show connection setup modal or fallback
+            alert('Unable to connect to server. Please check connection setup.');
+        }
+    };
 
     let getDislayMedia = () => {
         if (screen) {
@@ -345,11 +360,18 @@ export default function VideoMeetComponent() {
 
 
     let connectToSocketServer = () => {
-        socketRef.current = io.connect(server_url, { secure: false })
+        if (!serverUrl) {
+            console.error('No server URL available');
+            return;
+        }
+
+        console.log('Connecting to server:', serverUrl);
+        socketRef.current = io.connect(serverUrl, { secure: false })
 
         socketRef.current.on('signal', gotMessageFromServer)
 
         socketRef.current.on('connect', () => {
+            console.log('Connected to server successfully');
             socketRef.current.emit('join-call', window.location.href)
             socketIdRef.current = socketRef.current.id
 
@@ -481,6 +503,16 @@ export default function VideoMeetComponent() {
                 }
             })
         })
+
+        socketRef.current.on('connect_error', (error) => {
+            console.error('Connection error:', error);
+            setConnectionStatus('error');
+        });
+
+        socketRef.current.on('disconnect', () => {
+            console.log('Disconnected from server');
+            setConnectionStatus('disconnected');
+        });
     }
 
     let silence = () => {

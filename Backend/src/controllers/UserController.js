@@ -1,8 +1,7 @@
 import httpStatus from "http-status";
 import { User } from "../models/User.js";
-import bcrypt, { hash } from "bcrypt"
-
-import crypto from "crypto"
+import bcrypt from "bcrypt"
+import { createHash, randomBytes } from "crypto"
 import { Meeting } from "../models/Meeting.Model.js";
 const login = async (req, res) => {
 
@@ -22,7 +21,7 @@ const login = async (req, res) => {
         let isPasswordCorrect = await bcrypt.compare(password, user.password)
 
         if (isPasswordCorrect) {
-            let token = crypto.randomBytes(20).toString("hex");
+            let token = randomBytes(20).toString("hex");
 
             user.token = token;
             await user.save();

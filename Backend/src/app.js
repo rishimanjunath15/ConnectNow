@@ -40,16 +40,94 @@ app.options('*', (req, res) => {
 app.use("/api/v1/users", userRoutes);
 
 const start = async () => {
-    app.set("mongo_user")
-    const connectionDb = await mongoose.connect("mongodb+srv://imdigitalashish:imdigitalashish@cluster0.cujabk4.mongodb.net/")
+    try {
+        app.set("mongo_user")
+        const connectionDb = await mongoose.connect("mongodb+srv://imdigitalashish:imdigitalashish@cluster0.cujabk4.mongodb.net/")
 
-    console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
-    server.listen(app.get("port"), () => {
-        console.log("LISTENING ON PORT 8001")
-    });
+        console.log(`MONGO Connected DB Host: ${connectionDb.connection.host}`)
+        
+        const PORT = app.get("port");
+        
+        // Create a function to try starting the server on a port
+        const tryStartServer = (port) => {
+            return new Promise((resolve, reject) => {
+                const testServer = server.listen(port, "0.0.0.0", () => {
+                    console.log(`✅ BACKEND STARTED SUCCESSFULLY!`)
+                    console.log(`📡 Server listening on port ${port}`)
+                    console.log(`🌍 Local: http://localhost:${port}`)
+                    console.log(`🔗 Network: http://[YOUR_IP]:${port}`)
+                    console.log(`📊 MongoDB: Connected to ${connectionDb.connection.host}`)
+                    console.log(`🚀 Socket.IO: Ready for connections`)
+                    console.log(`⚡ Environment: ${process.env.NODE_ENV || 'development'}`)
+                    resolve(port);
+                });
+                
+                testServer.on('error', (error) => {
+                    if (error.code === 'EADDRINUSE') {
+                        reject(error);
+                    } else {
+                        console.error(`❌ Server error:`, error);
+                        reject(error);
+                    }
+                });
+            });
+        };
 
+        // Try starting on the default port first
+        try {
+            await tryStartServer(PORT);
+        } catch (error) {
+            if (error.code === 'EADDRINUSE') {
+                console.log(`❌ Port ${PORT} is already in use!`);
+                console.log(`💡 Trying alternative ports...`);
+                
+                // Try alternative ports
+                const alternativePorts = [8002, 8003, 8004, 8005, 8006];
+                let started = false;
+                
+                for (const altPort of alternativePorts) {
+                    try {
+                        await tryStartServer(altPort);
+                        console.log(`⚠️  IMPORTANT: Frontend needs to be updated!`);
+                        console.log(`� Update environment.js to use port ${altPort}`);
+                        console.log(`🔧 Or use the automated connection setup in the frontend`);
+                        started = true;
+                        break;
+                    } catch (err) {
+                        if (err.code !== 'EADDRINUSE') {
+                            throw err;
+                        }
+                        console.log(`Port ${altPort} also in use, trying next...`);
+                    }
+                }
+                
+                if (!started) {
+                    console.log(`❌ No available ports found in range 8001-8006`);
+                    console.log(`🔧 Please stop other services or restart your computer`);
+                    process.exit(1);
+                }
+            } else {
+                throw error;
+            }
+        }
 
+        // Graceful shutdown handlers
+        const gracefulShutdown = () => {
+            console.log('\n👋 Shutting down gracefully...');
+            server.close(() => {
+                console.log('✅ Server closed');
+                process.exit(0);
+            });
+        };
 
+        process.on('SIGTERM', gracefulShutdown);
+        process.on('SIGINT', gracefulShutdown);
+
+    } catch (error) {
+        console.error(`❌ Failed to start server:`, error.message);
+        console.error(`🔍 Full error:`, error);
+        process.exit(1);
+    }
 }
 
 
