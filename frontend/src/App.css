@@ -1,0 +1,285 @@
+.landingPageContainer{
+  width:100vw;
+  height: 100vh;
+background: url("./Assets/background.png");
+
+background-repeat: no-repeat;
+background-size: cover   ;
+color: white;
+}
+
+.landingPageContainer nav{
+  padding-inline: 1.2rem;
+  padding-block: 1.7rem;
+  padding: 2rem;
+  display: flex;
+  justify-content:space-between ;
+}
+
+.landingPageContainer nav h2{
+  font-size: 2.5rem;
+  font-weight:  55px; 
+}
+
+.landingPageContainer nav .navList{
+display: flex;
+gap:1.6rem;
+cursor: pointer;
+}
+
+.landingMianContainer{
+  display: flex;
+   align-items: center;
+  justify-content: space-between;
+  padding-inline:3rem; 
+    height: 60vh;
+}
+
+.landingMianContainer > div:nth-child(1){
+    flex: 1;
+  padding-right: 2rem;
+  
+}
+.landingMianContainer > div:nth-child(1) div[role='button']{
+  background-color: #d97500;
+  width: fit-content;
+  padding: 1rem;
+ border-radius: 0.7rem;
+ margin-top: 1.5rem;
+ 
+}
+
+.landingMianContainer > div:nth-child(2) {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  
+}
+
+.landingMianContainer > div:nth-child(2) img {
+  width:450px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Enhanced Navigation Bar */
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navBar h2 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Enhanced Meeting Container */
+.meetContainer {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.leftPanel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.rightPanel {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.rightPanel > img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.rightPanel > img:hover {
+  transform: scale(1.05);
+}
+
+.enlargedContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Card hover effects */
+.MuiCard-root {
+  transition: all 0.3s ease !important;
+  border-radius: 12px !important;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Button animations */
+.MuiButton-root {
+  transition: all 0.3s ease !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+.MuiButton-root:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* Chip enhancements */
+.MuiChip-root {
+  transition: all 0.3s ease !important;
+}
+
+.MuiChip-clickable:hover {
+  transform: scale(1.05) !important;
+}
+
+/* Status indicators */
+.status-connected {
+  color: #4caf50 !important;
+}
+
+.status-disconnected {
+  color: #f44336 !important;
+}
+
+.status-connecting {
+  color: #ff9800 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navBar {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .navBar h2 {
+    font-size: 1.5rem;
+  }
+  
+  .meetContainer {
+    flex-direction: column;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .leftPanel, .rightPanel {
+    width: 100%;
+    padding: 1rem;
+  }
+  
+  .leftPanel {
+    align-items: center;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a6fd8;
+}
+
+/* Loading states */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Dialog enhancements */
+.MuiDialog-paper {
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1) !important;
+}
+
+/* Stepper enhancements */
+.MuiStepLabel-root .Mui-completed {
+  color: #667eea !important;
+}
+
+.MuiStepLabel-root .Mui-active {
+  color: #667eea !important;
+}
+
+
