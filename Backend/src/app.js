@@ -49,7 +49,7 @@ app.use("/api/v1/users", userRoutes);
 const start = async () => {
     try {
         // Connect to MongoDB using environment variable
-        const mongoUrl = process.env.MONGODB_URI || "mongodb+srv://imdigitalashish:imdigitalashish@cluster0.cujabk4.mongodb.net/";
+        const mongoUrl = process.env.MONGODB_URI || "mongodb+srv://rishimanjunath15_db_user:IP1z0Zq7EVFMN2bQ@connectnow.zifgufm.mongodb.net/?appName=ConnectNow";
         const connectionDb = await mongoose.connect(mongoUrl, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
